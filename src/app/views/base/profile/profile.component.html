@@ -1,0 +1,63 @@
+<div class="fluid-container">
+<ngx-loading [show]="isLoading" [config]="{primaryColour: '#2980b9', secondaryColour: '#2980b9',
+        tertiaryColour: '#2980b9'}"></ngx-loading>
+      </div>
+<div class="card" *ngIf="profile!==null">
+    <img src="../../../assets/img/brand/user.png" alt="John" style="width:100%">
+    <h1>{{profile.name}}</h1>
+    <p class="title">Role : {{profile.role}}</p>
+    <p>UserName : {{profile.username}}</p>
+    <div style="margin: 24px 0;">
+      <a href="#"><i class="fa fa-dribbble"></i></a> 
+      <a href="#"><i class="fa fa-twitter"></i></a>  
+      <a href="#"><i class="fa fa-linkedin"></i></a>  
+      <a href="#"><i class="fa fa-facebook"></i></a> 
+    </div>
+    <p><button class="button_c">Contact</button></p>
+  </div>
+  <div class="modal fade" bsModal #ack=bs-modal tabindex="-1" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">{{ackHead}}</h4>
+          <button type="button" class="close" (click)="close_m()"
+        aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        </div>
+        <div class="modal-body">
+              <p class="{{resColor}}">{{ackMsg}}</p>
+  
+        </div>
+        <div class="modal-footer">
+  
+      <button type="button" class="btn btn-secondary"
+      id="ack_ok"
+        (click)="close_m()">Ok</button>
+    </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" bsModal #sessionModal=bs-modal tabindex="-1" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">{{authenticationService.ackHead}}</h4>
+          <button type="button" class="close" (click)="authenticationService.logout()"
+        aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        </div>
+        <div class="modal-body">
+              <p class="ack-msg">{{authenticationService.ackMsg}}</p>
+  
+        </div>
+        <div class="modal-footer">
+  
+      <button type="button" class="btn btn-success"
+      id="logout"
+        (click)="authenticationService.logout()">Logout</button>
+    </div>
+      </div>
+    </div>
+  </div>

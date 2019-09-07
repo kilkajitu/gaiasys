@@ -1,0 +1,150 @@
+<div class="fluid-container">
+        <ngx-loading [show]="isLoading" [config]="{primaryColour: '#2980b9', secondaryColour: '#2980b9',
+        tertiaryColour: '#2980b9'}"></ngx-loading>
+    <div class="card">
+    <div class="card-body">
+    <div class="row">
+    <div class="col-sm-6">
+        <h3>Tools</h3>
+    </div>
+    <div class="col-sm-6">
+        <button class="btn btn-primary pull-right" (click)="showModal()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+    </div>
+</div>
+    <table class="table" id="toolgroups" *ngIf="UserMapping?.length!==0">
+        <thead>
+            <tr>
+                
+                <th>S.NO.</th>
+                <th>Tools</th>
+                <th>Purchase Date</th>
+                <th>Cost Price</th>
+                <th>ToolGroup</th>
+                <th>Created Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="ToolsObj?.length===0">
+                    <td class="text-center" colspan="7">No Data Found.</td>
+                </tr>
+            <ng-container *ngFor="let data of ToolsObj;let i =index;">
+                <tr>
+                    
+                    <td>{{i+1}}</td>
+                    <td>{{data.name}}</td>
+                    <td>{{data.purchasedate}}</td>
+                    <td>{{data.costprice}}</td>
+                    <td>{{data.toolgroupn.name}}</td>
+                    <td>{{data.created_at}}</td>
+                    <td>
+                            <div class="btn-group">
+                                    <a (click)="edit_Tool(data.id,data.name,data.purchasedate,data.costprice,data.toolgroup_id)" class="btn btn-success"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                                    <a (click)="delete_Tool(data.id)"class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                    </div>
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+    </div>
+    </div>
+    </div>
+<div class="modal fade" bsModal #Tools=bs-modal tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Create ToolGroup</h4>
+                <button type="button" class="close" (click)="Tools.hide()"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            <form (ngSubmit)="create_tool()" #toolsgForm="ngForm">
+            <div class="input-group mb-3 form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="icon-basket-loaded"></i></span>
+                </div>
+                <input [(ngModel)]="name" name="name" type="text" class="form-control" placeholder="Tool Name" autocomplete="username" required>
+                </div>
+                <div class="input-group mb-3 form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="icon-calendar"></i></span>
+                </div>
+                <input [(ngModel)]="purchasedate" name="purchasedate" type="Date" class="form-control" placeholder="Purchase Date" autocomplete="username" required>
+                </div>
+                <div class="input-group mb-3 form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="icon-chart"></i></span>
+                </div>
+                <input [(ngModel)]="costprice" name="costprice" type="number" class="form-control" placeholder="Cost Price" autocomplete="username" required>
+                </div>
+                <div class="input-group mb-3 form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="icon-layers"></i></span>
+                </div>
+                <select class="form-control" [(ngModel)]="toolgroup_id" name="toolgroup_id">
+                    <option *ngFor="let dataobj of ToolGroups"
+                    [ngValue]="dataobj.id">{{dataobj.name}}</option>
+                </select>
+                </div>
+            <button type="submit" [disabled]="!toolsgForm.form.valid || costprice<=0 || toolgroup_id==null || toolgroup_id==0" class="btn btn-block btn-success">Submit</button>
+            </form>
+        
+            </div>
+            <div class="modal-footer">
+        
+            <button type="button" class="btn btn-secondary"
+            id="ack_ok"
+            (click)="Tools.hide()">Close</button>
+        </div>
+            </div>
+        </div>
+        </div>
+    <div class="modal fade" bsModal #ack=bs-modal tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">{{ackHead}}</h4>
+              <button type="button" class="close" (click)="close_m()"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            </div>
+            <div class="modal-body">
+                  <p class="{{resColor}}">{{ackMsg}}</p>
+      
+            </div>
+            <div class="modal-footer">
+      
+          <button type="button" class="btn btn-secondary"
+          id="ack_ok"
+            (click)="close_m()">Ok</button>
+        </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" bsModal #sessionModal=bs-modal tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">{{authenticationService.ackHead}}</h4>
+              <button type="button" class="close" (click)="authenticationService.logout()"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            </div>
+            <div class="modal-body">
+                  <p class="ack-msg">{{authenticationService.ackMsg}}</p>
+      
+            </div>
+            <div class="modal-footer">
+      
+          <button type="button" class="btn btn-success"
+          id="logout"
+            (click)="authenticationService.logout()">Logout</button>
+        </div>
+          </div>
+        </div>
+      </div>

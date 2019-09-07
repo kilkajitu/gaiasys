@@ -1,0 +1,93 @@
+<div class="fluid-container">
+    <ngx-loading [show]="isLoading" [config]="{primaryColour: '#2980b9', secondaryColour: '#2980b9',
+    tertiaryColour: '#2980b9'}"></ngx-loading>
+<div class="card">
+<div class="card-body">
+<h3>User Mapped Tools</h3>
+<table class="table" id="usertools">
+    <thead>
+        <tr>
+            <th>Tool Group</th>
+            <th>Created Time</th>
+            <th>Tools</th>
+            <th>Purchase Date</th>
+            <th>Cost Price</th>
+            <th>Created Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngIf="UserMapping?.length===0">
+            <td class="text-center" colspan="6">No Data Found.</td>
+        </tr>
+        <ng-container *ngFor="let data of UserMapping;let i =index;">
+            <tr *ngIf="data.tools.length==0">
+                <td>{{data.name}}</td>
+                <td>{{data.created_at}}</td>
+                <td colspan="4" class="text-center">No Tool Mapped.</td>
+            </tr>
+            <tr *ngIf="data.tools.length>0">
+                <td [attr.rowspan]="data.tools.length">{{data.name}}</td>
+                <td [attr.rowspan]="data.tools.length">{{data.created_at}}</td>
+                <td>{{data.tools[0].name}}</td>
+                <td>{{data.tools[0].purchasedate}}</td>
+                <td>{{data.tools[0].costprice}}</td>
+                <td>{{data.tools[0].created_at}}</td>
+            </tr>
+            <ng-container *ngFor="let datatool of data.tools;let j =index;">
+                    <td *ngIf="j!==0">{{datatool.name}}</td>
+                    <td *ngIf="j!==0">{{datatool.purchasedate}}</td>
+                    <td *ngIf="j!==0">{{datatool.costprice}}</td>
+                    <td *ngIf="j!==0">{{datatool.created_at}}</td>
+            </ng-container>
+        </ng-container>
+    </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="modal fade" bsModal #ack=bs-modal tabindex="-1" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">{{ackHead}}</h4>
+          <button type="button" class="close" (click)="close_m()"
+        aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        </div>
+        <div class="modal-body">
+              <p class="{{resColor}}">{{ackMsg}}</p>
+  
+        </div>
+        <div class="modal-footer">
+  
+      <button type="button" class="btn btn-secondary"
+      id="ack_ok"
+        (click)="close_m()">Ok</button>
+    </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" bsModal #sessionModal=bs-modal tabindex="-1" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">{{authenticationService.ackHead}}</h4>
+          <button type="button" class="close" (click)="authenticationService.logout()"
+        aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        </div>
+        <div class="modal-body">
+              <p class="ack-msg">{{authenticationService.ackMsg}}</p>
+  
+        </div>
+        <div class="modal-footer">
+  
+      <button type="button" class="btn btn-success"
+      id="logout"
+        (click)="authenticationService.logout()">Logout</button>
+    </div>
+      </div>
+    </div>
+  </div>

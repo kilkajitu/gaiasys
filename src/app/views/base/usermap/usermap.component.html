@@ -1,0 +1,140 @@
+<div class="fluid-container">
+        <ngx-loading [show]="isLoading" [config]="{primaryColour: '#2980b9', secondaryColour: '#2980b9',
+        tertiaryColour: '#2980b9'}"></ngx-loading>
+    <div class="card">
+    <div class="card-body">
+    <div class="row">
+    <div class="col-sm-6">
+        <h3>Assigned User</h3>
+    </div>
+    <div class="col-sm-6">
+        <button class="btn btn-primary pull-right" (click)="showModal()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+    </div>
+</div>
+<table class="table" id="usertools">
+        <thead>
+            <tr>
+                
+                <th>S.No.</th>
+                <th>Tool Group</th>
+                <th>Name</th>
+                <th>User Name</th>
+                <th>Created Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr *ngIf="UserMapObj?.length===0">
+                        <td class="text-center" colspan="6">No Data Found.</td>
+                    </tr>
+            <ng-container *ngFor="let data of UserMapObj;let i =index;">
+                <tr>
+                    
+                    <td>{{i+1}}</td>
+                    <td>{{data.toolgroup.name}}</td>
+                    <td>{{data.user.name}}</td>
+                    <td>{{data.user.username}}</td>
+                    <td>{{data.created_at}}</td>
+                    <td>
+                            <a (click)="delete_Map(data.id)"class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+    </div>
+    </div>
+    </div>
+<div class="modal fade" bsModal #Tools=bs-modal tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Create ToolGroup</h4>
+                <button type="button" class="close" (click)="Tools.hide()"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            <form (ngSubmit)="usermap()" #usermapngForm="ngForm">
+                    <label>Select Tool-Group</label>
+                    <div class="input-group mb-3 form-group">
+                    
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="icon-layers"></i></span>
+                    </div>
+                    <select class="form-control" [(ngModel)]="toolgroup_id" name="toolgroup_id">
+                        <option *ngFor="let dataobj of ToolGroups"
+                        [ngValue]="dataobj.id">{{dataobj.name}}</option>
+                    </select>
+                    </div>
+                    <label>Select User</label>
+                    <div class="input-group mb-3 form-group">
+                        
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="icon-user"></i></span>
+                        </div>
+                        <select class="form-control" [(ngModel)]="user_id" name="user_id">
+                            <option *ngFor="let userobj of Users"
+                            [ngValue]="userobj.id">{{userobj.name}}</option>
+                        </select>
+                        </div>
+                <button type="submit" [disabled]="!usermapngForm.form.valid || toolgroup_id==null || toolgroup_id==0 || user_id==null || user_id==0" class="btn btn-block btn-success">Submit</button>
+                </form>
+        
+            </div>
+            <div class="modal-footer">
+        
+            <button type="button" class="btn btn-secondary"
+            id="ack_ok"
+            (click)="Tools.hide()">Close</button>
+        </div>
+            </div>
+        </div>
+        </div>
+    <div class="modal fade" bsModal #ack=bs-modal tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">{{ackHead}}</h4>
+              <button type="button" class="close" (click)="close_m()"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            </div>
+            <div class="modal-body">
+                  <p class="{{resColor}}">{{ackMsg}}</p>
+      
+            </div>
+            <div class="modal-footer">
+      
+          <button type="button" class="btn btn-secondary"
+          id="ack_ok"
+            (click)="close_m()">Ok</button>
+        </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" bsModal #sessionModal=bs-modal tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">{{authenticationService.ackHead}}</h4>
+              <button type="button" class="close" (click)="authenticationService.logout()"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            </div>
+            <div class="modal-body">
+                  <p class="ack-msg">{{authenticationService.ackMsg}}</p>
+      
+            </div>
+            <div class="modal-footer">
+      
+          <button type="button" class="btn btn-success"
+          id="logout"
+            (click)="authenticationService.logout()">Logout</button>
+        </div>
+          </div>
+        </div>
+      </div>
